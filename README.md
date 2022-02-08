@@ -1,6 +1,6 @@
 # Distroless Node.js Docker Images with Dumb-Init
 
-Multi-architecture distroless Node.js Docker images based off of [`astefanutti/scratch-node`](https://github.com/astefanutti/scratch-node), with [`dumb-init`](https://github.com/Yelp/dumb-init).
+Multi-architecture distroless Node.js Docker images based off of [`astefanutti/scratch-node`](https://github.com/astefanutti/scratch-node). Adds the [`dumb-init`](https://github.com/Yelp/dumb-init) binary.
 
 Image size is `43.53 MB`.
 
