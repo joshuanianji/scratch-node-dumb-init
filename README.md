@@ -19,7 +19,7 @@ COPY package.json package-lock.json index.js ./
 
 RUN npm install --prod
 
-FROM astefanutti/scratch-node
+FROM ghcr.io/joshuanianji/scratch-node:16.12.0
 
 COPY --from=builder /app /
 
