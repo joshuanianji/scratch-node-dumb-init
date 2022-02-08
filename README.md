@@ -2,9 +2,13 @@
 
 Multi-architecture distroless Node.js Docker images based off of [`astefanutti/scratch-node`](https://github.com/astefanutti/scratch-node), with [`dumb-init`](https://github.com/Yelp/dumb-init).
 
+## Motivation
+
+I want really small docker images to run my node apps, but and I also want to use `dumb-init` to correctly handle `SIGINTS` and other stuff.
+
 ## Usage
 
-`dumb-init` is an entrypoint as `ENTRYPOINT ["/bin/dumb-init", "--"]`, so any CMDs will already have `dumb-init` prepended.
+`dumb-init` is an entrypoint as `ENTRYPOINT ["/bin/dumb-init", "--"]`, so any CMDs *should* already have `dumb-init` prepended.
 
 ```dockerfile
 FROM node as builder
