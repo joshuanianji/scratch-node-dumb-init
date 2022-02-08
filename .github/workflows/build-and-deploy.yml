@@ -5,7 +5,7 @@ on:
     branches: [main, fix-*]
     paths:
       - "Dockerfile"
-      - ".github/workflows/build-image.yml" # this file
+      - ".github/workflows/build-and-deploy.yml" # this file
 
 # https://evilmartians.com/chronicles/build-images-on-github-actions-with-docker-layer-caching
 jobs:
