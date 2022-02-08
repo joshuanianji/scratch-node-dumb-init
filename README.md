@@ -2,6 +2,8 @@
 
 Multi-architecture distroless Node.js Docker images based off of [`astefanutti/scratch-node`](https://github.com/astefanutti/scratch-node), with [`dumb-init`](https://github.com/Yelp/dumb-init).
 
+Image size is `43.53 MB`.
+
 ## Motivation
 
 I want really small docker images to run my node apps, but and I also want to use `dumb-init` to correctly handle `SIGINTS` and other stuff.
