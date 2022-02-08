@@ -51,7 +51,6 @@ jobs:
           context: .
           builder: ${{ steps.buildx.outputs.name }}
           file: Dockerfile
-          tags: ghcr.io/joshuanianji/scratch-node:latest
           cache-from: type=local,src=/tmp/.buildx-cache
           # Note the mode=max here
           # More: https://github.com/moby/buildkit#--export-cache-options
@@ -59,7 +58,8 @@ jobs:
           cache-to: type=local,mode=max,dest=/tmp/.buildx-cache-new
           push: ${{ github.event_name != 'pull_request' }}
           tags: |
-            ${{ matrix.node-version }}
+            ghcr.io/joshuanianji/scratch-node:latest
+            ghcr.io/joshuanianji/scratch-node:${{ matrix.node-version }}
 
       - name: 🚚 Move cache
         run: |
