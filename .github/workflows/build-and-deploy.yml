@@ -62,7 +62,7 @@ jobs:
             $TAG_PREFIX:${{ matrix.node-version }}
             $TAG_PREFIX:${{ github.sha }}
         env:
-          TAG_PREFIX: "ghcr.io/${{ github.repository }}
+          TAG_PREFIX: "ghcr.io/${{ github.repository }}"
 
       - name: 🚚 Move cache
         run: |
