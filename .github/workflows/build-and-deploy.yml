@@ -15,7 +15,7 @@ jobs:
     strategy:
       matrix:
         node-version: [16.12.0, 18.16.0]
-        architecture: [amd64]
+        architecture: [amd64, arm64]
     steps:
       - name: 🏁 Checkout repo
         uses: actions/checkout@v3
