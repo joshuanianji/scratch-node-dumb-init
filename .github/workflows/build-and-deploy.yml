@@ -24,15 +24,6 @@ jobs:
         id: buildx
         uses: docker/setup-buildx-action@v2.5.0
 
-      - name: 📦️ Cache Docker layers
-        uses: actions/cache@v2
-        with:
-          path: /tmp/.buildx-cache
-          # Key is named differently to avoid collision
-          key: ${{ runner.os }}-multi-buildx-${{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-multi-buildx
-
       - name: 🔒 Login to GitHub Container Registry
         uses: docker/login-action@v2
         with:
@@ -46,8 +37,8 @@ jobs:
           context: .
           builder: ${{ steps.buildx.outputs.name }}
           file: Dockerfile
-          cache-from: type=local,src=/tmp/.buildx-cache
-          cache-to: type=local,mode=max,dest=/tmp/.buildx-cache-new
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
           push: ${{ github.event_name != 'pull_request' }}
           tags: |
             ${{ env.TAG_PREFIX }}:latest
@@ -55,10 +46,5 @@ jobs:
         env:
           TAG_PREFIX: "ghcr.io/${{ github.repository }}"
 
-      - name: 🚚 Move cache
-        run: |
-          rm -rf /tmp/.buildx-cache
-          mv /tmp/.buildx-cache-new /tmp/.buildx-cache
-      
       - name: Get sizes
         run: docker images
