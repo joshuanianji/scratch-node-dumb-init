@@ -34,17 +34,12 @@ jobs:
       - name: 🏗️ Build Image
         uses: docker/build-push-action@v4
         with:
-          context: .
-          builder: ${{ steps.buildx.outputs.name }}
-          file: Dockerfile
           cache-from: type=gha
           cache-to: type=gha,mode=max
           push: ${{ github.event_name != 'pull_request' }}
-          tags: |
-            ${{ env.TAG_PREFIX }}:latest
-            ${{ env.TAG_PREFIX }}:${{ matrix.node-version }}
-        env:
-          TAG_PREFIX: "ghcr.io/${{ github.repository }}"
+          build-args: |
+            NODE_VERSION=${{ matrix.node-version }}
+            ARCH=${{ matrix.architecture }}
 
       - name: Get sizes
         run: docker images
