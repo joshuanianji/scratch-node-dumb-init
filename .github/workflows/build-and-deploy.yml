@@ -65,7 +65,7 @@ jobs:
 
       # test that the dumb-init binary kinda works
       - name: 🧪 Test 
-        run: docker run --rm --entrypoint "dumb-init --help" ${{ env.TEST_TAG }} 
+        run: docker run --rm --entrypoint "/bin/dumb-init --help" ${{ env.TEST_TAG }} 
 
       # https://docs.docker.com/build/ci/github-actions/test-before-push/
       # this first build just caches the layers
