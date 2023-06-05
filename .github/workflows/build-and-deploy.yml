@@ -100,9 +100,9 @@ jobs:
       - name: 🚀 Build and Push
         uses: docker/build-push-action@v4
         with:
-          load: true
           platforms: linux/amd64,linux/arm64
           build-args: |
             NODE_VERSION=${{ matrix.node-version }}
-          tags: ${{ env.TEST_TAG }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
           push: true
