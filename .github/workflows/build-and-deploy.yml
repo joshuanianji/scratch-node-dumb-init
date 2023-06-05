@@ -2,10 +2,10 @@ name: Build Images
 
 on:
   push:
-    branches: [main, fix-*]
     paths:
       - "Dockerfile"
       - ".github/workflows/build-and-deploy.yml" # this file
+  pull_request:
 
 # https://evilmartians.com/chronicles/build-images-on-github-actions-with-docker-layer-caching
 jobs:
