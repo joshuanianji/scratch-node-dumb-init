@@ -2,49 +2,107 @@ name: Build Images
 
 on:
   push:
-    branches: [main, fix-*]
+    branches: [main]
     paths:
       - "Dockerfile"
       - ".github/workflows/build-and-deploy.yml" # this file
+  pull_request:
+
+env:
+  TEST_TAG: ${{ github.repository }}/test
 
 # https://evilmartians.com/chronicles/build-images-on-github-actions-with-docker-layer-caching
 jobs:
-  build-images:
-    name: 🐳 Build Images
+  build-and-test:
+    name: 🐳 Build and Test
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [16.12.0, 18.16.0]
+        # Based on node versions astefanutti/scratch-node has available
+        # https://github.com/astefanutti/scratch-node
+        node-version: [8.17.0, 10.22.0, 12.22.1, 14.17.0, 16.14.2, 18.10.0]
         architecture: [amd64, arm64]
     steps:
       - name: 🏁 Checkout repo
         uses: actions/checkout@v3
 
+
+      - name: 📦 Setup QEMU
+        uses: docker/setup-qemu-action@v2
+
+
       - name: 🐳 Set up Docker Buildx
         id: buildx
         uses: docker/setup-buildx-action@v2.5.0
 
-      - name: 🔒 Login to GitHub Container Registry
+
+      # https://docs.docker.com/build/ci/github-actions/test-before-push/
+      # this first build just caches the layers
+      - name: 🏗️ Build 
+        uses: docker/build-push-action@v4
+        with:
+          load: true
+          platforms: ${{ matrix.architecture }}
+          build-args: |
+            NODE_VERSION=${{ matrix.node-version }}
+          tags: ${{ env.TEST_TAG }}
+
+
+      # test that the dumb-init binary kinda works
+      - name: 🧪 Test 
+        run: |
+          docker run --entrypoint /bin/dumb-init ${{ env.TEST_TAG }} --help \
+            --platform linux/${{ matrix.architecture }}
+
+
+  push:
+    name: 🚀 Push
+    runs-on: ubuntu-latest
+    needs: build-and-test
+    if: github.ref == 'refs/heads/main'
+    strategy:
+      matrix:
+        node-version: [8.17.0, 10.22.0, 12.22.1, 14.17.0, 16.14.2, 18.10.0]
+    steps:
+      - name: 🏁 Checkout repo
+        uses: actions/checkout@v3
+      
+
+      - name: 🐳 Set up Docker Buildx
+        id: buildx
+        uses: docker/setup-buildx-action@v2.5.0
+      
+
+      - name: 🔒 Login to GHCR
         uses: docker/login-action@v2
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: 🏗️ Build Image
+      
+      
+      - name: 🏷️ Docker meta
+        id: meta
+        uses: docker/metadata-action@v4
+        with:
+          images: ${{ github.repository }}
+          tags: |
+            # use custom value instead of git tag
+            type=semver,pattern={{version}},value=${{ matrix.node-version }}
+            type=semver,pattern={{major}}.{{minor}},value=${{ matrix.node-version }}
+            type=semver,pattern={{major}},value=${{ matrix.node-version }}
+            # latest if node version is highest (manually checking the latest version!)
+            # is there a way to do this automatically?
+            type=raw,value=latest,value=${{ matrix.node-version == '18.16.0' }}
+    
+      # https://docs.docker.com/build/ci/github-actions/test-before-push/
+      # this first build just caches the layers
+      - name: 🚀 Build and Push
         uses: docker/build-push-action@v4
         with:
-          context: .
-          builder: ${{ steps.buildx.outputs.name }}
-          file: Dockerfile
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
-          push: ${{ github.event_name != 'pull_request' }}
-          tags: |
-            ${{ env.TAG_PREFIX }}:latest
-            ${{ env.TAG_PREFIX }}:${{ matrix.node-version }}
-        env:
-          TAG_PREFIX: "ghcr.io/${{ github.repository }}"
-
-      - name: Get sizes
-        run: docker images
+          load: true
+          platforms: linux/amd64,linux/arm64
+          build-args: |
+            NODE_VERSION=${{ matrix.node-version }}
+          tags: ${{ env.TEST_TAG }}
+          push: true
