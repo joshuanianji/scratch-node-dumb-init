@@ -11,6 +11,10 @@ on:
 env:
   TEST_TAG: ${{ github.repository }}/test
 
+permissions:
+  contents: read
+  packages: write
+
 # https://evilmartians.com/chronicles/build-images-on-github-actions-with-docker-layer-caching
 jobs:
   build-and-test:
