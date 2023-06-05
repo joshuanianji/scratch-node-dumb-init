@@ -8,6 +8,9 @@ on:
       - ".github/workflows/build-and-deploy.yml" # this file
   pull_request:
 
+env:
+  TEST_TAG: ${{ github.repository }}/test
+
 # https://evilmartians.com/chronicles/build-images-on-github-actions-with-docker-layer-caching
 jobs:
   build-images:
@@ -49,17 +52,33 @@ jobs:
             type=raw,value=latest,value=${{ matrix.node-version == '18.16.0' }}
           flavor: 
 
-      - name: 🏗️ Build and Push
+      # https://docs.docker.com/build/ci/github-actions/test-before-push/
+      # this first build just caches the layers
+      - name: 🏗️ Build 
         uses: docker/build-push-action@v4
         with:
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          load: true
+          build-args: |
+            NODE_VERSION=${{ matrix.node-version }}
+            ARCH=${{ matrix.architecture }}
+          tags: ${{ env.TEST_TAG }}
+
+      # test that the dumb-init binary kinda works
+      - name: 🧪 Test 
+        run: docker run --rm --entrypoint "dumb-init --help" ${{ env.TEST_TAG }} 
+
+      # https://docs.docker.com/build/ci/github-actions/test-before-push/
+      # this first build just caches the layers
+      - name: 🚀 Push 
+        uses: docker/build-push-action@v4
+        with:
           push: ${{ github.event_name != 'pull_request' }}
           build-args: |
             NODE_VERSION=${{ matrix.node-version }}
             ARCH=${{ matrix.architecture }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+      
 
       - name: Get image sizes
         run: docker image ls --format "table {{.Repository}}\t{{.Size}}"
