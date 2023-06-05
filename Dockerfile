@@ -1,5 +1,4 @@
 ARG NODE_VERSION=16
-ARG ARCH=amd64
 
 FROM alpine:3.13.5 as installer
 
