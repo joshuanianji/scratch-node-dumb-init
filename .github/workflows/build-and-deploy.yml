@@ -98,7 +98,7 @@ jobs:
             type=semver,pattern={{major}},value=${{ matrix.node-version }}
             # latest if node version is highest (manually checking the latest version!)
             # is there a way to do this automatically?
-            type=raw,value=latest,value=${{ matrix.node-version == '18.16.0' }}
+            type=raw,value=latest,enable=${{ matrix.node-version == '18.16.0' }}
     
       # https://docs.docker.com/build/ci/github-actions/test-before-push/
       # this first build just caches the layers
