@@ -67,7 +67,8 @@ jobs:
     if: github.ref == 'refs/heads/main'
     strategy:
       matrix:
-        node-version: [8.17.0, 10.22.0, 12.22.1, 14.17.0, 16.14.2, 18.10.0]
+        node-version: [18.10.0, 16.14.2, 14.17.0, 12.22.1, 10.22.0, 8.17.0]
+      max-parallel: 1 # deploy one at a time
     steps:
       - name: 🏁 Checkout repo
         uses: actions/checkout@v3
@@ -99,6 +100,7 @@ jobs:
             # latest if node version is highest (manually checking the latest version!)
             # is there a way to do this automatically?
             type=raw,value=latest,enable=${{ matrix.node-version == '18.16.0' }}
+          flavor: false
     
       # https://docs.docker.com/build/ci/github-actions/test-before-push/
       # this first build just caches the layers
