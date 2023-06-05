@@ -46,7 +46,7 @@ jobs:
             type=semver,pattern={{major}},value=${{ matrix.node-version }}
             # latest if node version is highest (manually checking the latest version!)
             # is there a way to do this automatically?
-            type=latest,value=${{ matrix.node-version == '18.16.0' }}
+            type=raw,value=latest,value=${{ matrix.node-version == '18.16.0' }}
           flavor: 
 
       - name: 🏗️ Build Image
