@@ -71,7 +71,9 @@ jobs:
 
       # test that the dumb-init binary kinda works
       - name: 🧪 Test 
-        run: docker run --entrypoint /bin/dumb-init ${{ env.TEST_TAG }} --help --platform ${{ matrix.architecture }}
+        run: |
+          docker run --entrypoint /bin/dumb-init ${{ env.TEST_TAG }} --help \
+            --platform "linux/${{ matrix.architecture }}"
 
 
       # https://docs.docker.com/build/ci/github-actions/test-before-push/
