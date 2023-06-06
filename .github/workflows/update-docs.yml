@@ -1,4 +1,4 @@
-name: Build Images
+name: Update Docs
 
 on:
   workflow_dispatch:
