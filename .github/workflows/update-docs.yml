@@ -3,7 +3,9 @@ name: Update Docs
 on:
   workflow_dispatch:
   pull_request:
-    branches: [automated-docs]
+    paths:
+      - '.github/workflows/update-docs.yml' # this file
+      - 'scripts/*'
 
 jobs:
   update-docs:
