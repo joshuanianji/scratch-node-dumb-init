@@ -5,6 +5,7 @@
  * @returns
  */
 module.exports = async ({ github, context, core }) => {
+    console.log(`Getting package ${context.repo.repo}/${context.repo.owner}`);
     const packageVersions =
         await github.rest.packages.getAllPackageVersionsForPackageOwnedByUser({
             username: context.repo.owner,
