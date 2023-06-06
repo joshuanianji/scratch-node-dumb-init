@@ -4,6 +4,15 @@
  * @param {{ github: ReturnType<import('@actions/github').getOctokit>, context: import('@actions/github').context, core: import('@actions/core') }} param0 Defined by https://github.com/actions/github-script
  * @returns
  */
-module.exports = async ({github, context, core}) => {
-    console.log('HI')
-}
+module.exports = async ({ github, context, core }) => {
+    const packageVersions =
+        await github.rest.packages.getAllPackageVersionsForPackageOwnedByUser({
+            username: context.actor,
+            package_name: `${context.repo.owner}/${context.repo.repo}`,
+            package_type: "docker",
+        });
+
+    for (const version of packageVersions.data) {
+        console.log(version);
+    }
+};
