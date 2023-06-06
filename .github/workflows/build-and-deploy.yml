@@ -4,12 +4,12 @@ on:
   push:
     branches: [main]
     paths:
-      - "Dockerfile"
-      - ".github/workflows/build-and-deploy.yml" # this file
+      - 'Dockerfile'
+      - '.github/workflows/build-and-deploy.yml' # this file
   pull_request:
     paths:
-      - "Dockerfile"
-      - ".github/workflows/build-and-deploy.yml" # this file
+      - 'Dockerfile'
+      - '.github/workflows/build-and-deploy.yml' # this file
 
 env:
   TEST_TAG: ${{ github.repository }}/test
@@ -34,19 +34,16 @@ jobs:
       - name: 🏁 Checkout repo
         uses: actions/checkout@v3
 
-
       - name: 📦 Setup QEMU
         uses: docker/setup-qemu-action@v2
-
 
       - name: 🐳 Set up Docker Buildx
         id: buildx
         uses: docker/setup-buildx-action@v2.5.0
 
-
       # https://docs.docker.com/build/ci/github-actions/test-before-push/
       # this first build just caches the layers
-      - name: 🏗️ Build 
+      - name: 🏗️ Build
         uses: docker/build-push-action@v4
         with:
           load: true
@@ -55,13 +52,11 @@ jobs:
             NODE_VERSION=${{ matrix.node-version }}
           tags: ${{ env.TEST_TAG }}
 
-
       # test that the dumb-init binary kinda works
-      - name: 🧪 Test 
+      - name: 🧪 Test
         run: |
           docker run --entrypoint /bin/dumb-init ${{ env.TEST_TAG }} --help \
             --platform linux/${{ matrix.architecture }}
-
 
   push:
     name: 🚀 Push
@@ -75,12 +70,10 @@ jobs:
     steps:
       - name: 🏁 Checkout repo
         uses: actions/checkout@v3
-      
 
       - name: 🐳 Set up Docker Buildx
         id: buildx
         uses: docker/setup-buildx-action@v2.5.0
-      
 
       - name: 🔒 Login to GHCR
         uses: docker/login-action@v2
@@ -88,8 +81,7 @@ jobs:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      
-      
+
       - name: 🏷️ Docker meta
         id: meta
         uses: docker/metadata-action@v4
@@ -104,7 +96,6 @@ jobs:
             # is there a way to do this automatically?
             type=raw,value=latest,enable=${{ matrix.node-version == '18.16.0' }}
 
-    
       # https://docs.docker.com/build/ci/github-actions/test-before-push/
       # this first build just caches the layers
       - name: 🚀 Build and Push
