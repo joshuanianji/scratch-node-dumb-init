@@ -5,15 +5,45 @@
  * @returns
  */
 module.exports = async ({ github, context, core }) => {
-    console.log(`Getting package ${context.repo.repo}/${context.repo.owner}`);
-    const packageVersions =
-        await github.rest.packages.getAllPackageVersionsForPackageOwnedByUser({
-            username: context.repo.owner,
-            package_name: context.repo.repo,
-            package_type: 'docker',
-        });
+    const data = [];
+    let counter = 0;
+    let page_idx = 1;
 
-    for (const version of packageVersions.data) {
-        console.log(version);
+    // get all versions and their tags
+    // to do this, we iterate through ALL the package versions (a lot of SHA hashes)
+    // while finding those versions with tags
+    // this ASSUMES that we care about all the tags
+    while (true) {
+        const { data: versions } =
+            await github.rest.packages.getAllPackageVersionsForPackageOwnedByAuthenticatedUser(
+                {
+                    username: 'joshuanianji',
+                    package_name: 'scratch-node-dumb-init',
+                    package_type: 'container',
+                    per_page: 100,
+                    page: page_idx,
+                }
+            );
+
+        if (versions.length == 0) {
+            break;
+        }
+
+        for (const version of versions) {
+            const tags = version.metadata.container?.tags;
+            if (tags && tags.length > 0) {
+                console.log(`Version ${version.name} has tags:\n\t${tags}`);
+                data.push({
+                    name: version.name,
+                    tags: tags,
+                });
+            }
+        }
+
+        counter += versions.length;
+        page_idx += 1;
     }
+
+    console.log(`Looked at ${counter} versions and ${page_idx} pages`);
+    console.log(data);
 };
