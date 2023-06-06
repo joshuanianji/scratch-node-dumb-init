@@ -8,8 +8,8 @@ module.exports = async ({ github, context, core }) => {
     const packageVersions =
         await github.rest.packages.getAllPackageVersionsForPackageOwnedByUser({
             username: context.actor,
-            package_name: `${context.repo.owner}/${context.repo.repo}`,
-            package_type: "docker",
+            package_name: context.repo.repo,
+            package_type: 'docker',
         });
 
     for (const version of packageVersions.data) {
