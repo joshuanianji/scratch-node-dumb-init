@@ -59,7 +59,7 @@ module.exports = async ({ github, context, core }) => {
             ['image', 'inspect', imageName, '--format', '{{.Size}}'],
             true
         );
-        markdown += `| ${datum
+        markdown += `| ${datum.tags
             .map((a) => `\`${a}\``)
             .join(' ')} | ${formatBytes(size)} | \`amd64\` \`arm64\``;
     }
