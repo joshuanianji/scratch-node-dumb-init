@@ -63,7 +63,7 @@ module.exports = async ({ github, context, core }) => {
             .map((a) => `\`${a}\``)
             .join(' ')} | ${formatBytes(size)} | \`amd64\` \`arm64\``;
     }
-    console.log('METADATA:', metadata);
+    console.log('MARKDOWN:', markdown);
 
     // edit METADATA.md with markdown file
     console.log('Editing METADATA.md');
