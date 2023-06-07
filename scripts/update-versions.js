@@ -61,7 +61,7 @@ module.exports = async ({ github, context, core }) => {
         );
         markdown += `| ${datum.tags
             .map((a) => `\`${a}\``)
-            .join(' ')} | ${formatBytes(size)} | \`amd64\` \`arm64\`\n`;
+            .join(' ')} | ${formatBytes(size)} | \`amd64\` \`arm64\` | \n`;
     }
     console.log('MARKDOWN:', markdown);
 
