@@ -34,3 +34,4 @@ jobs:
           commit-message: Update Docs
           title: Update Metadata
           body: Update metadata, created by ${{ github.sha }}
+          base: ${{ github.base_ref }}
