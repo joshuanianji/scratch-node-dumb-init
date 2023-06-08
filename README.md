@@ -5,6 +5,14 @@ Multi-architecture distroless Node.js Docker images based off of [`astefanutti/s
 ## Metadata
 
 <!--METADATA-->
+| Tags | Size | Architectures |
+| ---- | ---- | ------------- |
+| `latest` `18` `18.10` `18.10.0` | 45.33 MiB | `amd64` `arm64` | 
+| `16` `16.14` `16.14.2` | 41.02 MiB | `amd64` `arm64` | 
+| `14` `14.17` `14.17.0` | 39.87 MiB | `amd64` `arm64` | 
+| `12` `12.22` `12.22.1` | 37.98 MiB | `amd64` `arm64` | 
+| `10` `10.22` `10.22.0` | 32.55 MiB | `amd64` `arm64` | 
+| `8` `8.17` `8.17.0` | 28.79 MiB | `amd64` `arm64` | 
 <!--END METADATA-->
 
 ## Motivation
