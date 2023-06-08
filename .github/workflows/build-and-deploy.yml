@@ -123,7 +123,9 @@ jobs:
         with:
           script: |
             const script = require('./scripts/update-versions.js')
-            await script({ github, context, core })
+            const val = await script({ github, context, core })
+            console.log("val:", val)
+            return val
 
       - uses: austenstone/markdown-interpolation-action@v2
         with:
