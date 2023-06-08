@@ -120,7 +120,6 @@ jobs:
         uses: actions/github-script@v6
         id: script
         with:
-          result-encoding: string
           script: |
             const script = require('./scripts/update-versions.js')
             await script({ github, context, core })
