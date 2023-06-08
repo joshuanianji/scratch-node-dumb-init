@@ -49,7 +49,7 @@ module.exports = async ({ github, context, core }) => {
     console.log(`Looked at ${counter} versions and ${page_idx} pages`);
     console.log(data);
 
-    let markdown = `| Tags | Size | Architectures |\n| ---- | ---- | ------------- |\n`;
+    let markdown = `\n| Tags | Size | Architectures |\n| ---- | ---- | ------------- |\n`;
 
     for (const datum of data) {
         const imageName = `ghcr.io/joshuanianji/scratch-node-dumb-init:${datum.tags[0]}`;
