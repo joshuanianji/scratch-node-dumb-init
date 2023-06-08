@@ -124,6 +124,10 @@ jobs:
             const script = require('./scripts/update-versions.js')
             await script({ github, context, core })
 
+      - uses: austenstone/markdown-interpolation-action@v2
+        with:
+          values: ${{ steps.script.outputs.result }}
+
       - name: Commit and make PR
         uses: peter-evans/create-pull-request@v5
         with:

@@ -70,6 +70,10 @@ module.exports = async ({ github, context, core }) => {
     await fs.writeFile('METADATA.md', markdown);
     console.log('Write file: showing contents');
     exec('cat', ['METADATA.md']);
+
+    return {
+        METADATA: markdown,
+    };
 };
 
 // https://stackoverflow.com/a/18650828
