@@ -19,7 +19,7 @@ env:
 permissions:
   contents: write
   packages: write
-  pull_requests: write
+  pull-requests: write
 
 # https://evilmartians.com/chronicles/build-images-on-github-actions-with-docker-layer-caching
 jobs:
