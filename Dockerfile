@@ -1,6 +1,6 @@
 ARG NODE_VERSION=16
 
-FROM alpine:3.13.5 as installer
+FROM alpine:3.18.2 as installer
 
 RUN apk update
 RUN apk add wget
