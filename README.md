@@ -1,6 +1,6 @@
 # NOTE: This repo is pretty much useless
 
-Docker has built-in init processes already, just use the `--init` flag when running `docker run` to use [tini](https://github.com/krallin/tini). You don't need these images!
+Docker has a built-in init process already, just use the `--init` flag when running `docker run` to boot up [tini](https://github.com/krallin/tini). You don't need these images!
 
 # Distroless Node.js Docker Images with Dumb-Init
 
